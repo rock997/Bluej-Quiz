@@ -1,0 +1,80 @@
+import java.io.*;
+import java.util.*;
+class quiz{
+    int developer=0,points=0,questionanswer=0;
+    public static void main()throws IOException
+    {
+        BufferedReader obj=new BufferedReader(new InputStreamReader(System.in));
+        //int p=-5 + (int)(Math.random() * ((10 + 5) + 1));  Code for generating random no between -5 and 5.
+
+
+        //Print Welcome statements,rules and choice statements after this
+        //Welcome statements
+        System.out.println("Welcome!");
+        //Rules..Add more
+        //special powers
+        System.out.println("In this quiz,you have 3 powers which are usable only once!They are:");
+        System.out.println("1.");//think of something unique
+        System.out.println("2.Developer:Change difficulty mode as well as subject.Warning:Your points will be reset to 0 on usage.To use,type in developer.");
+        System.out.println("3.Twisted Fate:Want to try your fate on luck? Then use Twisted Fate,which genereates a random number between -5 and 5 and adds/subtracts it to/from your mark's.To use,type tfate. ");
+        
+        choice();
+    }
+
+    public static void choice()throws IOException{
+        //Enter choices here
+        
+        //We have easy/hard mode .and you choose subjects and also mixed which contains mixed.
+        for(;;){
+            int choice=Integer.parseInt(obj.readLine());
+
+            if(choice==1){
+                System.out.println("You have chosen the _______ Subject! If you want to change,type 'change' or to continue ,press enter.");
+                String change=obj.readLine();
+                if(change.equalsIgnoreCase("change")){
+                    System.out.println("Enter the new choice!");
+                    continue ;
+
+                }
+                //Enter the questions
+                //this line comes after every question.Remove string after first use.
+                System.out.print("blab ");
+                questionanswer=check();
+                points=points+1;
+                //Specail powers usage
+
+            }
+        }
+    }
+
+    public static int check()throws IOException//Check whether input is no
+    {
+        int no=0;
+        Scanner sc = new Scanner(System.in);//Creating scanner class object
+        String temp="";//Initializing string variable
+        for(;;){//Checking whether input is no and accepting value
+            if(sc.hasNextInt()){
+                no=sc.nextInt();
+
+                return no;
+            }
+            temp=sc.next();
+            if(temp.equalsIgnoreCase("developer") ){
+                if(developer==0)
+                    developer();
+                else
+                    System.out.println("Power has already been used!");
+            }
+
+            System.out.println("Invalid Input!Please Enter a Integer type number.");
+
+                
+        }
+    }
+
+    public static void developer()throws IOException{
+        developer=1;
+        points=0; 
+        choice();
+
+    }
