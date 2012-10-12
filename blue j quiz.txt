@@ -2,7 +2,7 @@
 import java.io.*;
 import java.util.*;
 class quiz{
-    static int developer=0,points=0,questionanswer=0,tfate=0,qans=0,exiter=0;
+    static int developer=0,points=0,questionanswer=0,tfate=0,qans=0,exiter=0,devstart=0,tfstart=0;
     static String choiceinfo="",difinfo="";
     public static void main()throws IOException
     {
@@ -61,7 +61,8 @@ class quiz{
         //Enter choices here
         System.out.println("The choices are:");
         //We have easy/hard mode .and you choose subjects and also mixed which contains mixed.
-        for(;;){
+        //if(exiter==0){
+           for(;;){
             int choice=check();
 
             if(choice==1){
@@ -76,16 +77,19 @@ class quiz{
                 }
                 //Enter the questions
                 //this line comes after every question.Remove string after first use.
-                System.out.print("blab ");//IGNORE JUST TESTING.
+                System.out.print("this is a question.type in a ans or poer after this! ");//IGNORE JUST TESTING.
                 questionanswer=check();
                 points=points+1;
-                System.out.print("going back to choice");
-                exit();
+                
+                end();
+                break;
                 //Specail powers usage
 
             }
         }
     }
+//}
+    
 
     public static int check()throws IOException//Check whether input is no
     {
@@ -93,6 +97,7 @@ class quiz{
 
         Scanner sc = new Scanner(System.in);//Creating scanner class object
         String temp="";//Initializing string variable
+        
         for(;;){//Checking whether input is no and accepting value
             if(sc.hasNextInt()){
                 no=sc.nextInt();
@@ -102,8 +107,9 @@ class quiz{
             temp=sc.next();
             if(temp.equalsIgnoreCase("developer") ){
                 if(developer==0){
-                    System.out.println("Developer power has been used!");
+                    System.out.println("Developer power is Activated!");
                     developer();
+                    
                 }
                 else{
                     System.out.println("Power has already been used!");
@@ -131,13 +137,8 @@ class quiz{
                 System.out.println("Please continue answering");
                 continue;
             }
-            if(temp.equalsIgnoreCase("exit") ){
-                exit();
-                
-            }
-            if(temp.equalsIgnoreCase("exit") ){
-                break;
-            }
+         
+            
             if(temp.equalsIgnoreCase("infohelp") ){
                  System.out.println("The current subject is : "+choiceinfo);
                  System.out.println("The current difficulty is: "+difinfo);
@@ -145,16 +146,26 @@ class quiz{
                  System.out.println("Please continue answering");
                  continue;
             }
+              
+            if(temp.equalsIgnoreCase("exit") ){
+                exit();
+                
+            }
+               
             System.out.println("Invalid Input!Please Enter a valid answer or feature!");
 
         }
-        return no;
+    
+   
+        
     }
 
     public static void developer()throws IOException{
+        
         developer=1;
         points=0; 
         choice();
+    
 
     }
 
@@ -173,7 +184,7 @@ class quiz{
             String chosen=obj.readLine();
             if(chosen.equalsIgnoreCase("yes")){
 
-                main();
+               main();
 
             }
             else if(chosen.equalsIgnoreCase("skip")){
@@ -194,7 +205,8 @@ class quiz{
         BufferedReader obj=new BufferedReader(new InputStreamReader(System.in));
 
         System.out.println("Thank You for using the quiz program made by G.V.S akhil and Govind K.R!");
-        
+        System.exit(0);
+        exiter=1;
 
     }
 }
