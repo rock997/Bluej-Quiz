@@ -1,12 +1,14 @@
-//TO DO- qans,question,random,questions done. CHANGE CALLING FUCTIONS FROM LOOP TO PREVENT INFINITY!
+//TO DO- points scored in 1 SECTION,ASK USER HOW MANY SUBJECTS,QANS ON CHANGE SUBJECTS.qans=counter?
 import java.io.*;
 import java.util.*;
 class quiz{
-    static int developer=0,points=0,questionanswer=0,tfate=0,qans=0,exiter=0,devstart=0,tfstart=0;
-    static String choiceinfo="",difinfo="";
+    static int developer=0,points=0,ansr=0,tfate=0,qans=0,exiter=0,devstart=0,tfstart=0,redo=0,skipcont=0,ansoption=0,counter1=1,counter2=1,counter3=1,qloop1=0,anstotal=0,redoyes=0,correct=0,wrong=0,arrcount=0;
+    static String choiceinfo="",difinfo="",easyhard="";
+    static int arr[]=new int[3];
     public static void main()throws IOException
     {
         BufferedReader obj=new BufferedReader(new InputStreamReader(System.in));
+        System.out.println('\u000C');
 
         //int p=-5 + (int)(Math.random() * ((10 - (-5)) + 1));  Code for generating random no between -5 and 5.
         //Print Welcome statements,rules and choice statements after this
@@ -34,22 +36,23 @@ class quiz{
         System.out.println("===================================="); 
         System.out.println("There are certain rules to be followed in this quiz.These rules are:");
         System.out.println("1.Answers will only be accepted in the integer format.Other formats will not be accepted and you will be asked to re type the answer.");
-        System.out.println("2.Each question in easy mode carrie's 1 point and no negative marking.However,in hard mode each question carries 2 points and 1 negative marking.");
-        System.out.println("3.No Cheating!");
+        System.out.println("2.Each question in easy mode carrie's 1 point and no negative marking.However,in hard mode each question carries 5 points and 2 negative marking.");
+        System.out.println("3.No Cheating!"+'\n'+"4.After you change subjects and come back you will continue from the question you left off regardless of the mode.");
         continueafter();
         System.out.println("Features:");
+        System.out.println("To change subject,type in sub");
         System.out.println("In this quiz,there are some special features.These Features are: ");
         System.out.println("1.Cheats/Special powers -");
 
         //special powers
         System.out.println("In this quiz,you have 3 powers which are usable only once!They are:");
-        System.out.println("1.");//think of something unique
-        System.out.println("2.Developer:Change difficulty mode as well as subject.Warning:Your points will be reset to 0 on usage.To use,type in developer.");
-        System.out.println("3.Twisted Fate:Want to try your fate on luck? Then use Twisted Fate,which genereates a random number between -5 and 5 and adds it to your mark's.To use,type tfate. ");
+        System.out.println("1.Time Warp:Get another chance at the getting the right answer! This power ca be used for a total of 5 times.To use,type in redo .");
+        System.out.println("2.Developer:Getting many questions wrong? Then use developer! It resets your points and questions answered to 0 and allows you to start again.to use,type in developer.");
+        System.out.println("3.Twisted Fate:Want to try your fate on luck? Then use Twisted Fate,which genereates a random number between -20 and +20 and adds it to your mark's.To use,type tfate. ");
         System.out.println();
         System.out.println();
         System.out.println("2.Show points- At any time if you wish to see your current points,type in points.");
-        System.out.println("3.Information display - if you want to know which subject you chose and/or which question you are in,type 'infohelp'");
+        System.out.println("3.Information display - if you want to know which subject you chose and/or which question you are in as well as no of question you answered right and no of question u answered wrong.To use,type 'infohelp'");
         System.out.println("4.Exit - If at any time,you feel you cannot answer the questions or if you feel bored,type in 'exit' to quit the application");
         continueafter();
 
@@ -60,27 +63,42 @@ class quiz{
         BufferedReader obj=new BufferedReader(new InputStreamReader(System.in));
         //Enter choices here
         System.out.println("The choices are:");
+        System.out.println("1.History");
         //We have easy/hard mode .and you choose subjects and also mixed which contains mixed.
-        //if(exiter==0){
-           for(;;){
+
+        for(;;){
             int choice=check();
 
             if(choice==1){
-                choiceinfo="";
-                difinfo="Easy";
-                System.out.println("You have chosen the _______ Subject! If you want to change,type 'change' or to continue ,press enter.");
+                choiceinfo="History";
+
+                System.out.println("You have chosen the History Subject! If you want to change,type 'change' or to continue ,press enter.");
                 String change=obj.readLine();
                 if(change.equalsIgnoreCase("change")){
                     System.out.println("Enter the new choice!");
                     continue ;
 
                 }
-                //Enter the questions
+                System.out.println("Do you want easy mode or hard mode? type in 'easy' or 'hard'");
+                String easyhard=obj.readLine();
+                for(;;){
+                    if(easyhard.equalsIgnoreCase("easy")){
+                        difinfo="Easy";
+                        historyeasy();
+                        break;
+                    }
+                    else if(easyhard.equalsIgnoreCase("hard")){
+                        difinfo="Hard";
+                        historyhard();
+                        break;
+                    }
+                    else{
+                        System.out.println("Invalid input");
+                        easyhard=obj.readLine();
+                    }
+                }
                 //this line comes after every question.Remove string after first use.
-                System.out.print("this is a question.type in a ans or poer after this! ");//IGNORE JUST TESTING.
-                questionanswer=check();
-                points=points+1;
-                
+
                 end();
                 break;
                 //Specail powers usage
@@ -88,126 +106,513 @@ class quiz{
             }
         }
     }
-//}
-    
 
-    public static int check()throws IOException//Check whether input is no
-    {
-        int no=0;
-
-        Scanner sc = new Scanner(System.in);//Creating scanner class object
-        String temp="";//Initializing string variable
+    public static void generaleasy()throws IOException{
+        BufferedReader obj=new BufferedReader(new InputStreamReader(System.in));
         
-        for(;;){//Checking whether input is no and accepting value
-            if(sc.hasNextInt()){
-                no=sc.nextInt();
+        qloop1=0;
+        for(;qloop1==0;){
+            if(counter2==1){
+                counter2++;
 
-                return no;
             }
-            temp=sc.next();
-            if(temp.equalsIgnoreCase("developer") ){
-                if(developer==0){
-                    System.out.println("Developer power is Activated!");
-                    developer();
-                    
+        }
+    }
+
+    public static void historyhard()throws IOException{
+        BufferedReader obj=new BufferedReader(new InputStreamReader(System.in));
+        qloop1=0;
+
+    }
+
+    public static void historyeasy()throws IOException{
+        BufferedReader obj=new BufferedReader(new InputStreamReader(System.in));
+        
+        qloop1=0;
+        for(;qloop1==0;){
+            if(counter1==1){
+                qans=counter1-1;
+                counter1++;
+                System.out.println("1.	The assassination of _________ was the immediate cause of the First World War ");
+                System.out.println("1.	Archduke Ferdinand Francis" +'\n'+" 2.	Archduke Frederick Francis"+'\n'+" 3.	Archduke Francis Ferdinand"+'\n'+" 4.	Archduke Francis Frederick");                
+                ansr=check();
+                ansoption=3;
+                if(ansr==3){
+                    System.out.println("You have chosen the right answer! You get 5 points!");
+                    points=points+5;
+                    correct++;
                 }
                 else{
-                    System.out.println("Power has already been used!");
+                    System.out.println("Wrong Answer!You have recieved a penalty of -2 points!");
+
+                    points=points-2;
+                    redo();
+                    wrong++;
+                }
+                if(redoyes==1){
+                    counter1--;
+                    redoyes=0;
+                    wrong--;
                     continue;
                 }
+
+                continueafter();
             }
-            if(temp.equalsIgnoreCase("tfate") ){
-                if(tfate==0){
-                    System.out.println("Twisted Fate power has been used!");
-                    int p=(-5) + (int)(Math.random() * ((10 - (-5)) + 1));
-                    System.out.println("Points generated are :"+p+" and it has been added to your current points");
-                    points=points+p;
-                    tfate=1;
+            if(counter1==2){
+                qans=counter1-1;
+                counter1++;
+                System.out.println("2.The sinking of the _____________caused the USA to enter the First World War");
+                System.out.println("1.	Lusitania "+'\n'+"2.	Titanic"+'\n'+"3.	Liberty"+'\n'+"4.	Victoria");
+                ansr=check();
+                ansoption=1;
+                if(ansr==1){
+                    System.out.println("You have chosen the right answer! You get 5 points!");
+                    points=points+5;
+                    correct++;
+                }
+                else{
+                    System.out.println("Wrong Answer!You have recieved a penalty of -2 points!");
+                    wrong++;
+                    points=points-2;
+                    redo();
+                }
+                if(redoyes==1){
+                    counter1--;
+                    redoyes=0;
+                    wrong--;
+                    continue;
+                }
+
+                continueafter();
+
+            }
+            if(counter1==3){
+                qans=counter1-1;
+                counter1++;
+                System.out.println("3.	_________ organised the Fascist Party"); 
+                System.out.println("1.	Garibaldi"+'\n'+"2.	Hitler"+'\n'+"3.	Stalin"+'\n'+"4.	Mussolini");
+                ansr=check();
+                ansoption=4;
+                if(ansr==4){
+                    System.out.println("You have chosen the right answer! You get 5 points!");
+                    points=points+5;
+                    correct++;
+                }
+                else{
+                    System.out.println("Wrong Answer!You have recieved a penalty of -2 points!");
+                    wrong++;
+                    points=points-2;
+                    redo();
+                }
+                if(redoyes==1){
+                    counter1--;
+                    redoyes=0;
+                    wrong--;
+                    continue;
+                }
+
+                continueafter();
+
+            }
+            if(counter1==4){
+                qans=counter1-1;
+                counter1++;
+                System.out.println("4.	____________ is the author of the book Mein Kampf");
+                System.out.println("1.	Hitler"+'\n'+"2.	Stalin"+'\n'+"3.	Mussolini"+'\n'+"4.	Churchill");
+                ansr=check();
+                ansoption=1;
+                if(ansr==1){
+                    System.out.println("You have chosen the right answer! You get 5 points!");
+                    points=points+5;
+                    correct++;
+                }
+                else{
+                    System.out.println("Wrong Answer!You have recieved a penalty of -2 points!");
+                    wrong++;
+                    points=points-2;
+                    redo();
+                }
+                if(redoyes==1){
+                    counter1--;
+                    redoyes=0;
+                    wrong--;
+                    continue;
+                }
+
+                continueafter();
+
+            }
+            if(counter1==5){
+                qans=counter1-1;
+                counter1++;
+                System.out.println("5.	The first atom bomb was detonated in __________");
+                System.out.println("1.	Alamogordo"+'\n'+"2.	Pokhran"+'\n'+"3.	Hiroshima"+'\n'+"4.	Nagasaki");
+                ansr=check();
+                ansoption=3;
+                if(ansr==3){
+                    System.out.println("You have chosen the right answer! You get 5 points!");
+                    points=points+5;
+                    correct++;
+                }
+                else{
+                    System.out.println("Wrong Answer!You have recieved a penalty of -2 points!");
+                    wrong++;
+                    points=points-2;
+                    redo();
+                }
+                if(redoyes==1){
+                    counter1--;
+                    redoyes=0;
+                    wrong--;
+                    continue;
+                }
+
+                continueafter();
+
+            }
+            if(counter1==6){
+                qans=counter1-1;
+                counter1++;
+                System.out.println("6.	_________ is the current Secretary General of the UNO");
+                System.out.println("1.	Kofi Annano"+'\n'+"2.	Tony Blairo"+'\n'+"3.	Hillary Clintono"+'\n'+"4.	Ban Ki Moon");
+                ansr=check();
+                ansoption=4;
+                if(ansr==4){
+                    System.out.println("You have chosen the right answer! You get 5 points!");
+                    points=points+5;
+                    correct++;
+                }
+                else{
+                    System.out.println("Wrong Answer!You have recieved a penalty of -2 points!");
+                    wrong++;
+                    points=points-2;
+                    redo();
+                }
+                if(redoyes==1){
+                    counter1--;
+                    wrong--;
+                    redoyes=0;
+                    continue;
+                }
+
+                    continueafter();
+
+                
+            }
+                if(counter1==7){
+                    qans=counter1-1;
+                    counter1++;
+
+                    System.out.println("7.	The headquarters of the International Court of Justice is situated at _________");
+                    System.out.println("1.	New York"+'\n'+"2.	The Hague"+'\n'+"3.	Paris"+'\n'+"4.	Geneva");
+                    ansr=check();
+                    ansoption=2;
+                    if(ansr==2){
+                        System.out.println("You have chosen the right answer! You get 5 points!");
+                        points=points+5;
+                        correct++;
+                    }
+                    else{
+                        System.out.println("Wrong Answer!You have recieved a penalty of -5 points!");
+                        wrong++;
+                        points=points-2;
+                        redo();
+                    }
+                    if(redoyes==1){
+                        counter1--;
+                        wrong--;
+                        redoyes=0;
+                        continue;
+                    }
+
+                    continueafter();
+
+                }
+                if(counter1==8){
+                    qans=counter1-1;
+                    counter1++;
+                    System.out.println("8.	_________ was not a member of the Warsaw Pact");
+                    System.out.println("1.	East Germany"+'\n'+"2.	Poland"+'\n'+"3.	Romania"+'\n'+"4.	Italy");
+                    ansr=check();
+                    ansoption=4;
+                    if(ansr==4){
+                        System.out.println("You have chosen the right answer! You get 5 points!");
+                        points=points+5;
+                        correct++;
+                    }
+                    else{
+                        System.out.println("Wrong Answer!You have recieved a penalty of -2 points!");
+                        wrong++;
+                        points=points-2;
+                        redo();
+                    }
+                    if(redoyes==1){
+                        counter1--;
+                        redoyes=0;
+                        wrong--;
+                        continue;
+                    }
+                    
+                    continueafter();
+
+                }
+                if(counter1==9){
+                    qans=counter1-1;
+                    counter1++;
+                    System.out.println("9.	_________ was the last President of the USSR");
+                    System.out.println("1.	Mikhail Gorbachev"+'\n'+"2.	Boris Yeltsin"+'\n'+"3.	Stalin"+'\n'+"4.	Lenin");
+                    ansr=check();
+                    ansoption=1;
+                    if(ansr==4){
+                        System.out.println("You have chosen the right answer! You get 5 points!");
+                        points=points+5;
+                        correct++;
+                    }
+                    else{
+                        System.out.println("Wrong Answer!You have recieved a penalty of -2 points!");
+                        wrong++;
+                        points=points-2;
+                        redo();
+                    }
+                    if(redoyes==1){
+                        counter1--;
+                        redoyes=0;
+                        wrong--;
+                        continue;
+                    }
+                    
+                    continueafter();
+
+                }
+                if(counter1==10){
+                    qans=counter1-1;
+                    counter1++;
+                    System.out.println("10.	The founders of NAM are: Nasser, Tito and _________");
+                    System.out.println("1.	Nehru"+'\n'+"2.	Castro"+'\n'+"3.	Indira Gandhi"+'\n'+"4.	Nelson Mandela");
+                    ansr=check();
+                    ansoption=1;
+                    if(ansr==1){
+                        System.out.println("You have chosen the right answer! You get 5 points!");
+                        points=points+5;
+                        qans=counter1;
+                        correct++;
+                    }
+                    else{
+                        System.out.println("Wrong Answer!You have recieved a penalty of -2 points!");
+                        wrong++;
+                        qans=counter1;
+                        points=points-2;
+                        redo();
+                    }
+                    if(redoyes==1){
+                        counter1--;
+                        redoyes=0;
+                        wrong--;
+                        continue;
+                    }
+                    
+                    continueafter();
+                    System.out.println("You Have reached the End of the subject!"+'\n'+"You Have scored "+points+" points"+'\n'+"Type in exit to exit and sub to change subjects");
+                    arr[0]=counter1-1;
+                    String temp=obj.readLine();
+                    for(;;){
+                        if(temp.equalsIgnoreCase("exit")){
+                            end();
+                            System.exit(0);
+                        }
+                        else if(temp.equalsIgnoreCase("sub")){
+                            System.out.println("Change Succesfull! You points have been decreased by 2 for skipping the question");
+                            points=points-2;
+                            qloop1++;
+                            qans++;
+                            choice();
+                            System.exit(0);
+                        }
+                        else{
+                            System.out.println("Invalid input");
+                            temp=obj.readLine();
+                        }
+                    }
+                }
+                if(counter1>10){
+                    System.out.println("You have already answered all questions in this section!");
+                    System.out.print("Please choose the subject and mode again.");
+                    choice();
+                    System.exit(0);
+                }
+            }
+            end();
+        }
+    
+
+        public static void redo()throws IOException{
+            BufferedReader obj=new BufferedReader(new InputStreamReader(System.in)); 
+            int skipcheck=0;
+            if(redo<5){
+                System.out.println("Would you like to use the Time warp Power?Type in yes to use it or press enter to skip");
+                String tempred="";
+                for(;;){
+                    tempred=obj.readLine();
+                    if(tempred.equalsIgnoreCase("yes") || tempred.equalsIgnoreCase("redo")){
+                        redo++;
+                        System.out.println("Time Warp power activated! You can use it for "+(5-redo)+" more no of times");
+                        redoyes=1;
+                        skipcheck=1;
+                        break;  
+
+                    }
+                    else if(tempred.equalsIgnoreCase("")){
+                        break;
+                    }
+                    else{
+                        System.out.println("Invalid Input!");
+                        continue;
+                    }
+
+                }
+
+            }
+            if(skipcheck==0){
+                System.out.println("The Correct answer was the option "+ansoption);
+                skipcont=1;
+            }
+            skipcheck=0;
+        }
+
+        public static int check()throws IOException//Check whether input is no
+        {
+            int no=0;
+
+            Scanner sc = new Scanner(System.in);//Creating scanner class object
+            String temp="";//Initializing string variable
+
+            for(;;){//Checking whether input is no and accepting value
+                if(sc.hasNextInt()){
+                    no=sc.nextInt();
+
+                    return no;
+                }
+                temp=sc.next();
+                if(temp.equalsIgnoreCase("developer") ){
+                    if(developer==0){
+                        System.out.println("Developer power is Activated!");
+                        qans=0;
+                        correct=0;
+                        wrong=0;
+                        counter1=1;
+
+                        developer();
+
+                    }
+                    else{
+                        System.out.println("Power has already been used!");
+                        continue;
+                    }
+                }
+                if(temp.equalsIgnoreCase("sub")){
+                    System.out.println("Change Succesfull! You points have been decreased by 2 for skipping the question"+'\n'+"You Have currently scored "+points+" points ");
+                    points=points-2;
+                    qans++;
+                    wrong++;
+                    arr[0]=counter1-1;
+                    arr[1]=counter2-1;
+                    arr[2]=counter3-1;
+                    qloop1++;
+
+                    choice();
+                }
+                if(temp.equalsIgnoreCase("tfate") ){
+                    if(tfate==0){
+                        System.out.println("Twisted Fate power has been used!");
+                        int p=(-20) + (int)(Math.random() * ((20 - (-20)) + 1));
+                        System.out.println("Points generated are :"+p+" and it has been added to your current points");
+                        points=points+p;
+                        tfate=1;
+                        System.out.println("Please continue answering");
+                        continue;
+                    }
+
+                    else{
+                        System.out.println("Power has already been used!");
+                        continue;
+                    }
+                }
+                if(temp.equalsIgnoreCase("points") ){
+                    System.out.println("Your current points are :"+points);
                     System.out.println("Please continue answering");
                     continue;
                 }
 
-                else{
-                    System.out.println("Power has already been used!");
+                if(temp.equalsIgnoreCase("infohelp") ){
+                    System.out.println("The current subject is : "+choiceinfo);
+                    System.out.println("The current difficulty is: "+difinfo);
+                    System.out.println("Question answered are "+qans+" and remaining questions are : "+(10-qans)+" (Total questions are=10)");
+                    System.out.println(correct+" answers  were correct and "+wrong+" answers were wrong.(Skipping questions using change subject are counted as wrong.");
+                    System.out.println("Please continue answering");
                     continue;
                 }
+
+                if(temp.equalsIgnoreCase("exit") ){
+                    exit();
+
+                }
+
+                System.out.println("Invalid Input!Please Enter a valid answer or feature!(Time warp can only be enabled when prompted.)");
+
             }
-            if(temp.equalsIgnoreCase("points") ){
-                System.out.println("Your current points are :"+points);
-                System.out.println("Please continue answering");
-                continue;
-            }
-         
-            
-            if(temp.equalsIgnoreCase("infohelp") ){
-                 System.out.println("The current subject is : "+choiceinfo);
-                 System.out.println("The current difficulty is: "+difinfo);
-                 System.out.println("Question answered are "+qans+" and remaining questions are : "+(10-qans)+" (Total questions are=10)");
-                 System.out.println("Please continue answering");
-                 continue;
-            }
-              
-            if(temp.equalsIgnoreCase("exit") ){
-                exit();
-                
-            }
-               
-            System.out.println("Invalid Input!Please Enter a valid answer or feature!");
 
         }
-    
-   
-        
-    }
 
-    public static void developer()throws IOException{
-        
-        developer=1;
-        points=0; 
-        choice();
-    
+        public static void developer()throws IOException{
+            developer=1;
+            points=0; 
+            choice();
 
-    }
-
-    public static void continueafter()throws IOException{
-        BufferedReader obj=new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Press Enter to continue!");
-        String con=obj.readLine();
-    }
-
-    public static void end()throws IOException{
-        BufferedReader obj=new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("The quiz has reached the end! ");
-        System.out.println("Would you like to run the program again? if yes type in 'yes' to start the program from first or 'skip' to start program from choices directly ,else type in 'no'.");
-
-        for(;;){
-            String chosen=obj.readLine();
-            if(chosen.equalsIgnoreCase("yes")){
-
-               main();
-
-            }
-            else if(chosen.equalsIgnoreCase("skip")){
-                choice();
-            }
-            else if(chosen.equalsIgnoreCase("exit")){
-                exit();
-            }
-            else{
-                System.out.println("Invalid Input!");
-            }
         }
 
+        public static void continueafter()throws IOException{
+            BufferedReader obj=new BufferedReader(new InputStreamReader(System.in));
+            if(skipcont==0){
+                System.out.println("Press Enter to continue!");
+                String con=obj.readLine();
+            }
+            skipcont=0;
+        }
+
+        public static void end()throws IOException{
+            BufferedReader obj=new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("The quiz has reached the end! ");
+            System.out.println("You have entirely scored "+points+" points out of "+((arr[0]+arr[1]+arr[2])*5)+" points in this quiz!");
+            System.out.println("Would you like to run the program again? if yes type in 'yes' to start the program from first or 'skip' to start program from choices directly ,else type in 'no' or 'exit'.");
+
+            for(;;){
+                String chosen=obj.readLine();
+                if(chosen.equalsIgnoreCase("yes")){
+
+                    main();
+
+                }
+                else if(chosen.equalsIgnoreCase("skip")){
+                    choice();
+                }
+                else if(chosen.equalsIgnoreCase("exit") || chosen.equalsIgnoreCase("no")){
+                    exit();
+                }
+                else{
+                    System.out.println("Invalid Input!");
+                }
+            }
+
+        }
+
+        public static void exit()throws IOException{
+
+            BufferedReader obj=new BufferedReader(new InputStreamReader(System.in));
+
+            System.out.println("Thank You for using the quiz program made by G.V.S akhil and Govind K.R!");
+            System.exit(0);
+            exiter=1;
+
+        }
     }
-
-    public static void exit()throws IOException{
-        
-        BufferedReader obj=new BufferedReader(new InputStreamReader(System.in));
-
-        System.out.println("Thank You for using the quiz program made by G.V.S akhil and Govind K.R!");
-        System.exit(0);
-        exiter=1;
-
-    }
-}
 
